@@ -1,0 +1,41 @@
+{
+  "name": "safeguard-backend",
+  "version": "1.0.0",
+  "description": "SafeGuard rug-pull detection backend service",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "jest",
+    "lint": "eslint src/",
+    "watch": "nodemon src/watcher.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "ethers": "^6.8.0",
+    "socket.io": "^4.7.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "mongoose": "^7.5.0",
+    "redis": "^4.6.8",
+    "axios": "^1.5.0",
+    "winston": "^3.10.0",
+    "@tensorflow/tfjs-node": "^4.10.0",
+    "node-cron": "^3.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "jest": "^29.6.2",
+    "eslint": "^8.47.0"
+  },
+  "keywords": [
+    "ethereum",
+    "defi",
+    "security",
+    "rug-pull",
+    "blockchain",
+    "hackathon"
+  ],
+  "author": "SafeGuard Team",
+  "license": "MIT"
+}
