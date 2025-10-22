@@ -40,3 +40,5 @@ Thumbs.db
 
 # Docker
 .dockerignore
+frontend/bun.lock
+backend/bun.lock

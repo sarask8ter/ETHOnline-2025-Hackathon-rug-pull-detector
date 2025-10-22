@@ -13,7 +13,7 @@ class TokenWatcher extends EventEmitter {
   async start() {
     try {
       this.provider = new ethers.JsonRpcProvider(
-        process.env.POLYGON_RPC_URL || process.env.ETHEREUM_RPC_URL
+        'https://eth-mainnet.g.alchemy.com/v2/APIKEY'
       );
       
       await this.setupEventListeners();
