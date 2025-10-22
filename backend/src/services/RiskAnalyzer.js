@@ -8,7 +8,7 @@ const PaypalUsdService = require('./PaypalUsdService');
 class RiskAnalyzer {
   constructor() {
     this.provider = new ethers.JsonRpcProvider(
-      process.env.POLYGON_RPC_URL || process.env.ETHEREUM_RPC_URL
+      process.env.ETHEREUM_RPC_URL || process.env.POLYGON_RPC_URL
     );
     
     // Initialize prize-winning services
