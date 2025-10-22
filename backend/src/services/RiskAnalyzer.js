@@ -1,5 +1,9 @@
 const { ethers } = require('ethers');
 const logger = require('../utils/logger');
+const PythPriceService = require('./PythPriceService');
+const EnvioIndexer = require('./EnvioIndexer');
+const BlockscoutService = require('./BlockscoutService');
+const PaypalUsdService = require('./PaypalUsdService');
 
 class RiskAnalyzer {
   constructor() {
@@ -7,25 +11,41 @@ class RiskAnalyzer {
       process.env.POLYGON_RPC_URL || process.env.ETHEREUM_RPC_URL
     );
     
+    // Initialize prize-winning services
+    this.pythService = new PythPriceService();
+    this.envioIndexer = new EnvioIndexer();
+    this.blockscoutService = new BlockscoutService();
+    this.paypalUsdService = new PaypalUsdService();
+    
     this.riskFactors = {
       OWNERSHIP_CONCENTRATION: 'ownership_concentration',
       LIQUIDITY_RISK: 'liquidity_risk',
       HONEYPOT_DETECTION: 'honeypot_detection',
       SUSPICIOUS_TRANSFERS: 'suspicious_transfers',
       CONTRACT_VERIFICATION: 'contract_verification',
-      SOCIAL_SIGNALS: 'social_signals'
+      SOCIAL_SIGNALS: 'social_signals',
+      PYTH_PRICE_VOLATILITY: 'pyth_price_volatility',
+      ENVIO_ACTIVITY_ANALYSIS: 'envio_activity_analysis',
+      BLOCKSCOUT_CONTRACT_ANALYSIS: 'blockscout_contract_analysis',
+      PAYPAL_USD_ANALYSIS: 'paypal_usd_analysis'
     };
   }
 
   async analyzeToken(tokenData) {
     try {
+      // Enhanced analysis with prize-winning integrations
       const analyses = await Promise.all([
         this.analyzeOwnershipConcentration(tokenData),
         this.analyzeLiquidityRisk(tokenData),
         this.detectHoneypot(tokenData),
         this.analyzeSuspiciousTransfers(tokenData),
         this.checkContractVerification(tokenData),
-        this.analyzeSocialSignals(tokenData)
+        this.analyzeSocialSignals(tokenData),
+        // Prize-winning integrations
+        this.pythService.analyzeTokenPriceRisk(tokenData.symbol),
+        this.envioIndexer.analyzeTokenActivity(tokenData.address),
+        this.blockscoutService.analyzeContract(tokenData.address),
+        this.paypalUsdService.analyzePyusdIntegration(tokenData)
       ]);
 
       const riskScore = this.calculateOverallRisk(analyses);
@@ -259,12 +279,17 @@ class RiskAnalyzer {
     if (analyses.length === 0) return 50;
 
     const weights = {
-      [this.riskFactors.OWNERSHIP_CONCENTRATION]: 0.25,
-      [this.riskFactors.LIQUIDITY_RISK]: 0.20,
-      [this.riskFactors.HONEYPOT_DETECTION]: 0.25,
-      [this.riskFactors.SUSPICIOUS_TRANSFERS]: 0.15,
-      [this.riskFactors.CONTRACT_VERIFICATION]: 0.10,
-      [this.riskFactors.SOCIAL_SIGNALS]: 0.05
+      [this.riskFactors.OWNERSHIP_CONCENTRATION]: 0.20,
+      [this.riskFactors.LIQUIDITY_RISK]: 0.15,
+      [this.riskFactors.HONEYPOT_DETECTION]: 0.20,
+      [this.riskFactors.SUSPICIOUS_TRANSFERS]: 0.10,
+      [this.riskFactors.CONTRACT_VERIFICATION]: 0.08,
+      [this.riskFactors.SOCIAL_SIGNALS]: 0.05,
+      // Prize-winning integrations with higher weights
+      [this.riskFactors.PYTH_PRICE_VOLATILITY]: 0.10,
+      [this.riskFactors.ENVIO_ACTIVITY_ANALYSIS]: 0.12,
+      [this.riskFactors.BLOCKSCOUT_CONTRACT_ANALYSIS]: 0.12,
+      [this.riskFactors.PAYPAL_USD_ANALYSIS]: 0.08
     };
 
     let weightedSum = 0;

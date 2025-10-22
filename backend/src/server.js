@@ -32,13 +32,17 @@ app.get('/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/safeguard')
-  .then(() => {
-    logger.info('Connected to MongoDB');
-  })
-  .catch((error) => {
-    logger.error('MongoDB connection error:', error);
-  });
+if (process.env.MONGODB_URI && !process.env.MONGODB_URI.includes('memory://')) {
+  mongoose.connect(process.env.MONGODB_URI)
+    .then(() => {
+      logger.info('Connected to MongoDB');
+    })
+    .catch((error) => {
+      logger.warn('MongoDB connection failed, running without persistent storage:', error.message);
+    });
+} else {
+  logger.info('Running without MongoDB - using in-memory storage only');
+}
 
 const tokenWatcher = new TokenWatcher();
 const riskAnalyzer = new RiskAnalyzer();
